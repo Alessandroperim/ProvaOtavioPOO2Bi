@@ -1,0 +1,34 @@
+// prisma/schema.prisma
+// Remove a diretiva generator, pois não é mais necessária
+
+// Defina o bloco datasource
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Defina os modelos
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String
+  lances Lance[]
+  leiloes Leilao[]
+}
+
+model Lance {
+  id        Int     @id @default(autoincrement())
+  comprador User    @relation(fields: [compradorId], references: [id])
+  compradorId Int
+  leilao    String
+  valor     Float
+}
+
+model Leilao {
+  id         Int      @id @default(autoincrement())
+  produto    String
+  preco      Float
+  dataLimite DateTime
+  dono       User     @relation(fields: [donoId], references: [id])
+  donoId     Int
+}
